@@ -24,6 +24,19 @@ namespace SingleResponsibilityPrinciple
             return tradeData;
         }
 
+        private IEnumerable<string> ReadURLTradeData(string URL){
+            var tradeData = new List<string>(); 
+            var client = new WebClient(); 
+            using (var stream = client.OpenRead(URL)) 
+            using (var reader = new StreamReader(stream)) { 
+                string line; 
+                while ((line = reader.ReadLine()) != null) { 
+                    tradeData.Add(line); 
+                } 
+            } 
+            return tradeData;
+        }
+
         private IEnumerable<TradeRecord> ParseTrades(IEnumerable<string> tradeData)
         {
             var trades = new List<TradeRecord>();
@@ -92,7 +105,7 @@ namespace SingleResponsibilityPrinciple
             Console.WriteLine(msgType+ " :" +message, args);
             using (StreamWriter logfile = File.AppendText("log.xml"))
             {
-                logfile.WriteLine("<log><type>"+type+"</type><message>" + message + "</message></log> ", args);
+                logfile.WriteLine("<log><type>"+msgType+"</type><message>" + message + "</message></log> ", args);
             }
         }
 
